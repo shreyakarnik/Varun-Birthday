@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Varun's 30th Birthday</title>
+    <style>
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-width: 1024px;
+        overflow-x: auto;
+        background: #050505;
+        color: #fff;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+      }
+      button { border: 0; cursor: pointer; font: inherit; }
+      .bgVideo, .playerVideo {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        background: #050505;
+      }
+      .bgVideo {
+        position: fixed;
+        inset: 0;
+        z-index: -3;
+      }
+      .bgFallback, .shade {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+      }
+      .bgFallback {
+        z-index: -4;
+        background:
+          linear-gradient(90deg, rgba(0,0,0,.96), rgba(0,0,0,.35), rgba(0,0,0,.88)),
+          radial-gradient(circle at 58% 34%, rgba(160, 0, 0, .42), transparent 34%),
+          #090909;
+      }
+      .shade {
+        z-index: -2;
+        background:
+          linear-gradient(90deg, rgba(5,5,5,.82) 0%, rgba(5,5,5,.34) 30%, rgba(5,5,5,0) 62%),
+          linear-gradient(0deg, rgba(5,5,5,.78) 0%, rgba(5,5,5,.18) 24%, rgba(5,5,5,0) 58%);
+      }
+      .topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        gap: 34px;
+        height: 92px;
+        padding: 0 46px;
+        background: linear-gradient(
+          180deg,
+          rgba(0,0,0,.98) 0%,
+          rgba(0,0,0,.82) 58%,
+          rgba(0,0,0,0) 100%
+        );
+      }
+      .netflix {
+        color: #e50914;
+        font-size: 31px;
+        font-weight: 950;
+        letter-spacing: 1px;
+        text-shadow: 0 0 18px rgba(229,9,20,.28);
+      }
+      .profile {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #fff;
+        font-weight: 800;
+      }
+      .avatar {
+        display: grid;
+        height: 36px;
+        width: 36px;
+        place-items: center;
+        border-radius: 4px;
+        background: linear-gradient(135deg, #383838, #111);
+        font-size: 23px;
+      }
+      .page {
+        min-height: 100vh;
+        padding: 76px 46px 38px;
+      }
+      .home {
+        position: relative;
+        top: 60px;
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding-top: 132px;
+        padding-bottom: 0;
+      }
+      .heroBlock {
+        max-width: 760px;
+        margin-bottom: 38px;
+      }
+      .varunLogo {
+        margin: 0 0 24px;
+        width: 720px;
+        font-size: 82px;
+        font-weight: 950;
+        letter-spacing: -4px;
+        line-height: .9;
+        text-shadow: 0 3px 0 rgba(0,0,0,.36), 0 0 22px rgba(0,0,0,.62);
+      }
+      .subtitle {
+        width: 470px;
+        margin: 0 0 24px;
+        color: rgba(255,255,255,.86);
+        font-size: 21px;
+        line-height: 1.45;
+      }
+      .heroActions {
+        display: flex;
+        gap: 14px;
+      }
+      .heroActions button, .gameButton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 52px;
+        border-radius: 4px;
+        padding: 0 28px;
+        font-size: 21px;
+        font-weight: 850;
+      }
+      .playBtn, .shuffleBtn { background: #fff; color: #000; }
+      .moreBtn, .ghostBtn { background: rgba(109,109,110,.72); color: #fff; }
+      .discardBtn { background: #e50914; color: #fff; }
+      .gameShelf h2 {
+        margin: 0 0 14px;
+        font-size: 25px;
+      }
+      .gameRow {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(270px, 1fr));
+        gap: 14px;
+      }
+      .tile {
+        position: relative;
+        min-height: 178px;
+        overflow: hidden;
+        border-radius: 5px;
+        border: 1px solid rgba(255,255,255,.16);
+        background:
+          radial-gradient(circle at 18% 18%, rgba(255,255,255,.16) 0 9%, transparent 10%),
+          radial-gradient(circle at 72% 28%, rgba(255,255,255,.1) 0 12%, transparent 13%),
+          radial-gradient(circle at 38% 76%, rgba(255,255,255,.11) 0 10%, transparent 11%),
+          linear-gradient(135deg, rgba(229,9,20,.92), rgba(25,25,25,.96) 54%), #1d1d1d;
+        color: #fff;
+        text-align: left;
+        transition: transform .18s ease, box-shadow .18s ease;
+      }
+      .tile:hover {
+        transform: scale(1.035);
+        box-shadow: 0 24px 60px rgba(0,0,0,.5);
+      }
+      .tile:nth-child(2) {
+        background:
+          linear-gradient(90deg, rgba(255,255,255,.12) 0 10px, transparent 10px 36px),
+          linear-gradient(0deg, rgba(255,255,255,.12) 0 10px, transparent 10px 36px),
+          linear-gradient(135deg, #191919, #631010 62%, #080808);
+      }
+      .tile:nth-child(3) {
+        background:
+          radial-gradient(ellipse at 12% 40%, transparent 0 10px, rgba(255,255,255,.13) 11px 13px, transparent 14px 28px),
+          radial-gradient(ellipse at 42% 62%, transparent 0 10px, rgba(255,255,255,.1) 11px 13px, transparent 14px 30px),
+          radial-gradient(ellipse at 74% 36%, transparent 0 10px, rgba(255,255,255,.11) 11px 13px, transparent 14px 32px),
+          linear-gradient(135deg, #101010, #823b00 58%, #080808);
+      }
+      .tileInner {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 20px;
+        background: linear-gradient(0deg, rgba(0,0,0,.66), rgba(0,0,0,.12) 66%);
+      }
+      .tile strong {
+        display: block;
+        font-size: 29px;
+        line-height: 1;
+      }
+      .tile span span {
+        display: block;
+        margin-top: 8px;
+        color: rgba(255,255,255,.86);
+        font-size: 14px;
+        line-height: 1.35;
+      }
+      .gameView, .playerView, .home:not(.active) { display: none; }
+      .gameView.active, .home.active { display: block; }
+      .playerView.active { display: block; }
+      .backBtn {
+        position: fixed;
+        top: 92px;
+        left: 46px;
+        z-index: 35;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(0,0,0,.5);
+        color: #fff;
+        font-size: 22px;
+        font-weight: 850;
+      }
+      .gameHeader {
+        width: min(1120px, calc(100vw - 120px));
+        margin: 0 auto;
+        padding-top: 22px;
+      }
+      .gameHeader h1 {
+        margin: 0 0 12px;
+        font-size: 46px;
+        line-height: 1;
+      }
+      #trivia .gameHeader {
+        transform: translateY(-20px);
+      }
+      .rules {
+        border-left: 4px solid #e50914;
+        background: rgba(0,0,0,.58);
+        padding: 14px 18px;
+        color: rgba(255,255,255,.88);
+        font-size: 16px;
+        line-height: 1.45;
+      }
+      .stage {
+        display: grid;
+        width: min(1120px, calc(100vw - 120px));
+        min-height: calc(100vh - 292px);
+        margin: 0 auto;
+        place-items: center;
+      }
+      .shuffleStage {
+        position: relative;
+      }
+      .shuffleBoard,
+      .wwvdBoard,
+      .triviaBoard {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 620px;
+        transform: translate(-50%, -50%);
+      }
+      .wwvdBoard {
+        top: calc(47% + 40px);
+      }
+      .triviaBoard {
+        width: 620px;
+      }
+      .cahCard {
+        display: flex;
+        min-height: 370px;
+        width: min(620px, 100%);
+        flex-direction: column;
+        justify-content: space-between;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 32px 90px rgba(0,0,0,.62);
+      }
+      .whiteCard { background: #f6f2e8; color: #101010; }
+      #shuffleCard {
+        height: 370px;
+        min-height: 370px;
+        width: 620px;
+        overflow: hidden;
+      }
+      #wwvdCard {
+        height: 370px;
+        min-height: 370px;
+        width: 620px;
+        overflow: hidden;
+      }
+      .blackCard {
+        background: #080808;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,.12);
+      }
+      .cardType {
+        color: #e50914;
+        font-size: 12px;
+        font-weight: 950;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+      .promptText {
+        margin: 28px 0;
+        font-size: 42px;
+        font-weight: 900;
+        line-height: 1.08;
+      }
+      .cardFoot {
+        color: rgba(0,0,0,.56);
+        font-size: 14px;
+        font-weight: 850;
+      }
+      .blackCard .cardFoot { color: rgba(255,255,255,.48); }
+      .buttonBar {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 22px;
+      }
+      .gameButton {
+        border-radius: 5px;
+        min-height: 48px;
+        font-size: 17px;
+      }
+      .timerPanel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .timerCircle {
+        display: grid;
+        width: 74px;
+        height: 74px;
+        place-items: center;
+        border: 5px solid #e50914;
+        border-radius: 50%;
+        background: rgba(0,0,0,.72);
+        font-size: 28px;
+        font-weight: 950;
+      }
+      .triviaWrap { width: 620px; perspective: 1600px; }
+      .triviaControls {
+        position: absolute;
+        top: 50%;
+        left: calc(50% + 350px);
+        display: grid;
+        gap: 14px;
+        transform: translateY(-50%);
+      }
+      .roundControl {
+        display: grid;
+        width: 58px;
+        height: 58px;
+        place-items: center;
+        border-radius: 50%;
+        background: #fff;
+        color: #e50914;
+        font-size: 32px;
+        font-weight: 950;
+        box-shadow: 0 12px 32px rgba(0,0,0,.4);
+      }
+      .roundControl.arrow {
+        color: #111;
+        font-size: 34px;
+      }
+      .flipShell {
+        position: relative;
+        height: 370px;
+        min-height: 370px;
+        transform-style: preserve-3d;
+        transition: transform .65s cubic-bezier(.2,.72,.18,1);
+      }
+      .flipShell.flipped { transform: rotateX(-180deg); }
+      .flipFace {
+        position: absolute;
+        inset: 0;
+        backface-visibility: hidden;
+      }
+      .flipBack { transform: rotateX(180deg); }
+      .answerText {
+        font-size: 28px;
+        font-weight: 900;
+        line-height: 1.2;
+      }
+      .factText {
+        margin-top: 18px;
+        color: rgba(255,255,255,.78);
+        font-size: 18px;
+        font-weight: 650;
+        line-height: 1.45;
+      }
+      .options {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 18px;
+        width: 860px;
+        margin-left: 50%;
+        transform: translateX(-50%);
+      }
+      .optionBtn {
+        min-height: 70px;
+        border-radius: 8px;
+        background: rgba(255,255,255,.9);
+        color: #090909;
+        padding: 14px 16px;
+        text-align: left;
+        font-size: 17px;
+        font-weight: 400;
+      }
+      .optionBtn.correct { background: #1f9d55; color: #fff; }
+      .optionBtn.wrong { background: #e50914; color: #fff; }
+      .emptyState {
+        font-size: 30px;
+        font-weight: 900;
+        text-align: center;
+      }
+      .playerView {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        background: #000;
+        padding: 0;
+      }
+      .playerFrame {
+        position: absolute;
+        inset: 0;
+      }
+      .playerPlaceholder {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at 50% 42%, rgba(229,9,20,.22), transparent 32%),
+          #000;
+        color: rgba(255,255,255,.68);
+        font-size: 24px;
+        font-weight: 800;
+      }
+      .playerControls {
+        position: absolute;
+        top: 32px;
+        left: 32px;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .playerBack {
+        height: 48px;
+        width: 48px;
+        border-radius: 50%;
+        background: rgba(0,0,0,.5);
+        color: #fff;
+        font-size: 34px;
+      }
+      .playerTitle {
+        font-size: 26px;
+        font-weight: 900;
+        text-shadow: 0 3px 20px #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bgFallback"></div>
+    <video class="bgVideo" src="./videos/varun-bg.mp4" autoplay muted loop playsinline></video>
+    <div class="shade"></div>
+
+    <header class="topbar">
+      <div class="netflix">VFLIX</div>
+      <div class="profile">
+        <div class="avatar">👴</div>
+        <span>Grumps</span>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="page home active">
+        <div class="heroBlock">
+          <h1 class="varunLogo">Varun's<br>30th Birthday</h1>
+          <p class="subtitle">Now streaming a mildly chaotic celebration of&nbsp;30&nbsp;years on Earth and several decades of premature uncle energy.</p>
+          <div class="heroActions">
+            <button class="playBtn" onclick="openPlayer()">▶ Play</button>
+            <button class="moreBtn" onclick="document.getElementById('games').scrollIntoView()">ⓘ More Info</button>
+          </div>
+        </div>
+
+        <section id="games" class="gameShelf">
+          <h2>Drinking Games</h2>
+          <div class="gameRow">
+            <button class="tile" onclick="openGame('shuffle')">
+              <span class="tileInner"><strong>Shuffle</strong><span>Random prompt cards. Do what the card says, then shuffle or discard.</span></span>
+            </button>
+            <button class="tile" onclick="openGame('wwvd')">
+              <span class="tileInner"><strong>What Would Varun Do?</strong><span>Predict the birthday boy before the 15-second timer runs out.</span></span>
+            </button>
+            <button class="tile" onclick="openGame('trivia')">
+              <span class="tileInner"><strong>Absolutely Random Trivia</strong><span>Drink if you do not know the answer.</span></span>
+            </button>
+          </div>
+        </section>
+      </section>
+
+      <section id="player" class="playerView">
+        <div class="playerControls">
+          <button class="playerBack" onclick="closePlayer()">‹</button>
+          <div class="playerTitle">Varun's 30th Birthday</div>
+        </div>
+        <div class="playerFrame">
+          <video class="playerVideo" src="./videos/varun-player.mp4" controls></video>
+          <div class="playerPlaceholder">Add your player video as videos/varun-player.mp4</div>
+        </div>
+      </section>
+
+      <section id="shuffle" class="page gameView">
+        <button class="backBtn" onclick="goHome()">‹ Back</button>
+        <div class="gameHeader">
+          <h1>Shuffle</h1>
+          <div class="rules">A random card will appear. Follow its instructions immediately. If a card applies to multiple people, everyone takes a sip. If there's a dispute, the birthday boy has final say.</div>
+        </div>
+        <div class="stage shuffleStage">
+          <div class="shuffleBoard">
+            <article id="shuffleCard" class="cahCard whiteCard"></article>
+            <div class="buttonBar">
+              <button class="gameButton shuffleBtn" onclick="drawShuffle()">🎲 Shuffle</button>
+              <button class="gameButton discardBtn" onclick="discardShuffle()">✕ Discard</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="wwvd" class="page gameView">
+        <button class="backBtn" onclick="goHome()">‹ Back</button>
+        <div class="gameHeader">
+          <h1>What Would Varun Do?</h1>
+          <div class="rules">A random scenario will appear. Varun has 15 seconds to secretly write what he would actually do. Everyone else guesses. Reveal Varun's answer. Anyone who guessed correctly is safe. Everyone else drinks. If Varun fails to answer within 15 seconds, he drinks.</div>
+        </div>
+        <div class="stage shuffleStage">
+          <div class="wwvdBoard">
+            <article id="wwvdCard" class="cahCard blackCard"></article>
+            <div class="buttonBar">
+              <button class="gameButton shuffleBtn" onclick="drawWwvd()">🎲 Shuffle</button>
+              <button class="gameButton discardBtn" onclick="discardWwvd()">✕ Discard</button>
+            </div>
+            <aside class="timerPanel">
+              <div id="timer" class="timerCircle">15</div>
+              <button class="gameButton discardBtn" onclick="startTimer()">▶ Start Timer</button>
+              <button id="pauseTimerBtn" class="gameButton ghostBtn" onclick="pauseTimer()">Pause Timer</button>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section id="trivia" class="page gameView">
+        <button class="backBtn" onclick="goHome()">‹ Back</button>
+        <div class="gameHeader">
+          <h1>Absolutely Random Trivia</h1>
+          <div class="rules">Drink if you don't know the answer.</div>
+        </div>
+        <div class="stage shuffleStage">
+          <div class="triviaBoard triviaWrap">
+            <div id="triviaFlip" class="flipShell">
+              <article id="triviaCardFront" class="cahCard blackCard flipFace"></article>
+              <article id="triviaCardBack" class="cahCard blackCard flipFace flipBack"></article>
+            </div>
+            <div id="options" class="options"></div>
+          </div>
+          <div class="triviaControls">
+            <button class="roundControl" title="Skip question" onclick="drawTrivia()">×</button>
+            <button class="roundControl arrow" title="Next question" onclick="drawTrivia()">›</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const shufflePrompts = [
+        { type: "Once", text: "Person sitting to Varun's right takes a sip" },
+        { type: "Once", text: "Person sitting to Varun's left finishes their drink" },
+        { type: "Once", text: "Last person to text Varun drinks" },
+        { type: "Once", text: "Last person to hug Varun drinks" },
+        { type: "Once", text: "Anyone who has known Varun less than 2 years drinks" },
+        { type: "Once", text: "Anyone who met Varun online drinks" },
+        { type: "Once", text: "Whoever has the oldest photo with Varun assigns drinks" },
+        { type: "Once", text: "Person with the lowest phone battery drinks" },
+        { type: "Once", text: "Tallest person drinks" },
+        { type: "Once", text: "Shortest person assigns drinks" },
+        { type: "Once", text: "Person with the newest shoes assigns a sip" },
+        { type: "Once", text: "Whoever travelled the farthest to be here drinks" },
+        { type: "Once", text: "Last person to make eye contact with Varun drinks" },
+        { type: "Once", text: "Anyone wearing black drinks" },
+        { type: "Once", text: "Loser of rock-paper-scissors against Varun drinks" },
+        { type: "Round Robin", text: "Everyone guesses Varun's Starbucks order - wrong answers drink" },
+        { type: "Round Robin", text: "Everyone says one thing Varun would never say" },
+        { type: "Round Robin", text: "Everyone votes who would survive a zombie apocalypse with Varun" },
+        { type: "Round Robin", text: "Everyone guesses Varun's type" },
+        { type: "Round Robin", text: "Everyone tries Varun's signature pose" },
+        { type: "Round Robin", text: "Everyone imitates Varun's texting style" },
+        { type: "Round Robin", text: "Everyone says how they met Varun" },
+        { type: "Round Robin", text: "Everyone votes who would survive longest stranded with Varun" },
+        { type: "Round Robin", text: "Everyone guesses Varun's most-used emoji" },
+        { type: "Round Robin", text: "Everyone has to say one thing they genuinely like about Varun or drink" },
+        { type: "Continuously Active", text: "If Varun checks his phone, everyone drinks" },
+        { type: "Continuously Active", text: "If Varun laughs too hard, he assigns 3 sips" },
+        { type: "Continuously Active", text: "If someone interrupts Varun mid-story, they drink" },
+        { type: "Continuously Active", text: "If Varun says 'actually,' everyone drinks" },
+        { type: "Continuously Active", text: "If Varun mentions work, he drinks" },
+        { type: "Continuously Active", text: "If someone says 'remember when...', everyone drinks" },
+        { type: "Continuously Active", text: "If anyone mentions Canada vs US differences, everyone drinks" },
+        { type: "Continuously Active", text: "If Varun says 'that's crazy,' everyone drinks" },
+        { type: "Continuously Active", text: "If someone says 'lowkey,' they drink" },
+        { type: "Continuously Active", text: "If Varun starts telling a long story, everyone pre-drinks" },
+        { type: "Continuously Active", text: "If someone drops their phone, they finish their drink" },
+        { type: "Continuously Active", text: "If Varun says 'wait wait wait,' everyone sips" },
+        { type: "Continuously Active", text: "If someone says 'literally,' they drink" },
+        { type: "Continuously Active", text: "If Varun starts debating something seriously, everyone drinks" },
+        { type: "Continuously Active", text: "If anyone says 'fair enough,' they drink" },
+        { type: "Continuously Active", text: "If Varun roasts someone successfully, victim drinks" },
+        { type: "Continuously Active", text: "If the roast flops, Varun drinks" },
+        { type: "Continuously Active", text: "If anyone says 'vibes,' everyone drinks" },
+        { type: "Continuously Active", text: "If Varun starts giving advice, everyone drinks" },
+        { type: "Continuously Active", text: "If anyone mentions AI or ChatGPT, everyone drinks" }
+      ];
+
+      const wwvdPrompts = [
+        "You accidentally like a photo from 2018. What do you do?",
+        "You find $100 on the ground. What do you do?",
+        "Your Uber driver starts crying. What do you do?",
+        "You miss your flight by 2 minutes. What do you do?",
+        "You wake up with 147 unread messages. What do you do?",
+        "You receive a text saying \"we need to talk.\" What do you do?",
+        "Your food arrives completely wrong. What do you do?",
+        "You discover your phone battery is at 1%. What do you do?",
+        "You're stuck in an elevator with your ex. What do you do?",
+        "A stranger hands you a baby and runs away. What do you do?",
+        "You become Prime Minister for one day. What's your first move?",
+        "You accidentally send a screenshot to the person in the screenshot. What do you do?",
+        "You win $10 million overnight. What do you buy first?",
+        "A penguin appears in your kitchen. What do you do?",
+        "You're the only person awake at a house party. What do you do?",
+        "Your boss accidentally sends you their salary. What do you do?",
+        "You discover your dog can talk. What is your first question?",
+        "You open your camera and it's already recording. What do you do?",
+        "You're offered free pizza for life or $50,000 cash. Which do you choose?",
+        "An alien lands and asks to speak to humanity's leader. What do you do?",
+        "You accidentally join a cult. How long before you realize?",
+        "Someone says \"trust me\" before doing something important. What do you do?",
+        "You have to spend 24 hours in IKEA. What's your strategy?",
+        "You can erase one app from existence forever. Which one?",
+        "You wake up and discover you're 60 years old. What's the first thing you complain about?"
+      ];
+
+      const trivia = [
+        { category: "Weird Biology", q: "A tardigrade can survive in the vacuum of outer space. What else can it withstand that would absolutely end you?", options: ["A direct lightning strike", "Being boiled at 150°C", "5,000 Gy of radiation (humans die at ~5 Gy)", "Falling from orbit unprotected"], answer: 2, fact: "Tardigrades tolerate ~5,000-6,200 gray of radiation by producing a unique protein called Dsup that physically wraps their DNA." },
+        { category: "Weird Geography", q: "The Dead Sea is famous for being incredibly salty. But which body of water is actually saltier?", options: ["The Great Salt Lake, Utah", "The Aral Sea", "Don Juan Pond, Antarctica", "Lake Assal, Djibouti"], answer: 2, fact: "Don Juan Pond in Antarctica is about 40% salt, roughly 18x saltier than the ocean and nearly 3x saltier than the Dead Sea." },
+        { category: "Science History", q: "Barry Marshall won the Nobel Prize for proving stomach ulcers are caused by bacteria. How did he prove it?", options: ["He infected lab mice and observed ulcers develop", "He drank a beaker of H. pylori and gave himself an ulcer", "He analysed 50 years of hospital records", "He accidentally contaminated his own petri dish"], answer: 1, fact: "In 1984, Marshall drank a solution of Helicobacter pylori and developed stomach inflammation within days." },
+        { category: "Weird Geography", q: "Lake Natron in Tanzania is so alkaline it calcifies animals that fall in. Which creature thrives there?", options: ["Nile crocodiles", "Lesser flamingos", "African lungfish", "Alcolapia tilapia"], answer: 1, fact: "Lesser flamingos breed almost exclusively on Lake Natron because the caustic conditions keep predators away." },
+        { category: "Weird Biology", q: "The mantis shrimp punches with the force of a bullet. But what's equally wild about its eyes?", options: ["It can see in complete darkness", "It has 16 types of photoreceptors (humans have 3)", "It can see directly behind itself without moving", "It detects electrical fields like a shark"], answer: 1, fact: "Mantis shrimp have 16 types of colour photoreceptors and use a different processing strategy." },
+        { category: "Science History", q: "Ignaz Semmelweis proved in 1847 that handwashing dramatically reduced deaths in maternity wards. What happened next?", options: ["He was immediately celebrated and handwashing became standard", "He was ignored, fired, and died in an asylum - likely from the same infection he was fighting", "His landmark paper took 10 years to be accepted", "He was knighted by the Austrian Emperor"], answer: 1, fact: "Semmelweis proved handwashing dropped maternal mortality from about 35% to under 2%, but the medical establishment ignored him." },
+        { category: "Weird Geography", q: "Movile Cave in Romania has been sealed from the surface for 5.5 million years. What's inside?", options: ["Completely empty - nothing survives", "~48 species found nowhere else on Earth, powered by chemosynthesis", "Fossilised megafauna perfectly preserved in mineral deposits", "An underground river teeming with blind fish"], answer: 1, fact: "Movile Cave contains a unique ecosystem driven by bacteria that oxidise hydrogen sulphide instead of sunlight." },
+        { category: "Weird Biology", q: "How does the mimic octopus avoid predators?", options: ["It produces a venom that makes predators temporarily forget they were hunting", "It impersonates dangerous animals like lionfish and sea snakes in real time", "It camouflages as a rock so convincingly its own species can't find it", "It uses bioluminescence to disorient attackers"], answer: 1, fact: "The mimic octopus can impersonate lionfish, flatfish, and sea snakes by adjusting body shape, colour, and movement." },
+        { category: "Science History", q: "What did Tesla claim to have invented in 1934, widely reported in newspapers, but never actually built?", options: ["A perpetual motion machine powered by cosmic rays", "A 'teleforce' particle beam weapon he called the death ray", "A device to communicate with other planets", "A machine that could control the weather globally"], answer: 1, fact: "Tesla announced a superweapon that could bring down enemy aircraft at huge range, but never built a prototype." },
+        { category: "Weird Biology", q: "The axolotl can regrow entire limbs, heart tissue, and parts of its brain. What's even stranger?", options: ["It never develops into an adult - it stays permanently juvenile (neotenic)", "Every axolotl is genetically identical - it only reproduces asexually", "It can survive being frozen solid and thaw back to life", "It has no immune system and relies entirely on regeneration"], answer: 0, fact: "Axolotls are neotenic: they reach sexual maturity while retaining larval features." },
+        { category: "Nigeria", q: "Nigeria has the largest film industry by number of films produced annually. What's it called?", options: ["Afrowood", "Lagoswood", "Nollywood", "Naijwood"], answer: 2, fact: "Nollywood produces over 2,500 films per year, more than Hollywood by volume." },
+        { category: "Ireland", q: "Ireland is the only country in the world whose national symbol is a musical instrument. What is it?", options: ["The fiddle", "The tin whistle", "The bodhrán", "The harp"], answer: 3, fact: "The harp is the official symbol of Ireland and appears on government documents, the President's flag, euro coins, and Guinness cans." },
+        { category: "Italy", q: "Italy has more UNESCO World Heritage Sites than any other country. But which of these weird Italian facts is actually true?", options: ["Venice has a law requiring all gondolas to be painted black", "Italy produces 40% of the world's wine", "Rome has more fountains than any city in the world", "All three of these are true"], answer: 3, fact: "All three are true: Venice has black gondolas by law, Italy produces huge amounts of wine, and Rome has over 2,000 fountains." },
+        { category: "India", q: "India's space agency ISRO made history in 2023. What did it achieve?", options: ["First country to land on the Moon's south pole", "First Asian country to reach Mars orbit on the first attempt", "First country to launch a satellite using only solar power", "Both A and B are true"], answer: 3, fact: "Both are true. Chandrayaan-3 landed near the lunar south pole in August 2023, and Mangalyaan reached Mars on its first attempt in 2014." },
+        { category: "Supply Chain", q: "The global supply chain crisis of 2021 was sparked by multiple factors. Which of these actually happened?", options: ["A single container ship blocked the Suez Canal for 6 days and caused an estimated $9.6B/day in losses", "Semiconductor shortages caused car makers to ship cars without certain chips", "A factory fire at one supplier halted global production of a specific type of resin", "All three of these happened"], answer: 3, fact: "All three happened during the 2021 supply chain crisis." },
+        { category: "Animation", q: "Early Disney animators had a trick to make animations feel more natural. What was the '12 basic principles' rule for making things look alive?", options: ["Every character must blink at irregular intervals of 2-5 seconds", "Objects must squash when they hit surfaces and stretch when moving fast", "All limbs must return to a 'neutral pose' between movements", "Faces must always follow the rule of thirds in screen placement"], answer: 1, fact: "Squash and stretch is the first of Disney's 12 principles of animation." }
+      ];
+
+      let shuffleDeck = [...shufflePrompts];
+      let wwvdDeck = [...wwvdPrompts];
+      let triviaDeck = [...trivia];
+      let currentShuffle = null;
+      let currentWwvd = null;
+      let currentTrivia = null;
+      let timerId = null;
+      let seconds = 15;
+      let paused = false;
+
+      function randomFrom(deck) {
+        return deck[Math.floor(Math.random() * deck.length)];
+      }
+      function showOnly(id) {
+        document.querySelectorAll(".home, .gameView, .playerView").forEach(el => el.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+      }
+      function openPlayer() {
+        showOnly("player");
+        const video = document.querySelector(".playerVideo");
+        video.play().catch(() => {});
+      }
+      function closePlayer() {
+        const video = document.querySelector(".playerVideo");
+        video.pause();
+        showOnly("home");
+      }
+      function openGame(id) {
+        showOnly(id);
+        if (id === "shuffle" && !currentShuffle) drawShuffle();
+        if (id === "wwvd" && !currentWwvd) drawWwvd();
+        if (id === "trivia" && !currentTrivia) drawTrivia();
+      }
+      function goHome() {
+        stopTimer();
+        showOnly("home");
+      }
+      function drawShuffle() {
+        if (!shuffleDeck.length) {
+          document.getElementById("shuffleCard").innerHTML = '<div class="emptyState">No cards left.</div><div class="cardFoot">Refresh the page to reset.</div>';
+          return;
+        }
+        currentShuffle = randomFrom(shuffleDeck);
+        document.getElementById("shuffleCard").innerHTML = `<div><div class="cardType">${currentShuffle.type}</div><div class="promptText">${currentShuffle.text}</div></div><div class="cardFoot">${shuffleDeck.length} cards remaining</div>`;
+      }
+      function discardShuffle() {
+        if (!currentShuffle) return;
+        shuffleDeck = shuffleDeck.filter(card => card !== currentShuffle);
+        currentShuffle = null;
+        drawShuffle();
+      }
+      function drawWwvd() {
+        stopTimer();
+        if (!wwvdDeck.length) {
+          document.getElementById("wwvdCard").innerHTML = '<div class="emptyState">No scenarios left.</div><div class="cardFoot">Refresh the page to reset.</div>';
+          return;
+        }
+        currentWwvd = randomFrom(wwvdDeck);
+        document.getElementById("wwvdCard").innerHTML = `<div><div class="cardType">WWVD</div><div class="promptText">${currentWwvd}</div></div><div class="cardFoot">${wwvdDeck.length} scenarios remaining</div>`;
+      }
+      function discardWwvd() {
+        if (!currentWwvd) return;
+        wwvdDeck = wwvdDeck.filter(card => card !== currentWwvd);
+        currentWwvd = null;
+        drawWwvd();
+      }
+      function startTimer() {
+        window.clearInterval(timerId);
+        seconds = 15;
+        paused = false;
+        document.getElementById("pauseTimerBtn").textContent = "Pause Timer";
+        document.getElementById("timer").textContent = seconds;
+        timerId = window.setInterval(tickTimer, 1000);
+      }
+      function tickTimer() {
+        if (paused) return;
+        seconds -= 1;
+        document.getElementById("timer").textContent = seconds;
+        if (seconds <= 0) {
+          window.clearInterval(timerId);
+          timerId = null;
+        }
+      }
+      function pauseTimer() {
+        if (!timerId) return;
+        paused = !paused;
+        document.getElementById("pauseTimerBtn").textContent = paused ? "Resume Timer" : "Pause Timer";
+      }
+      function stopTimer() {
+        window.clearInterval(timerId);
+        timerId = null;
+        seconds = 15;
+        paused = false;
+        document.getElementById("timer").textContent = "15";
+        document.getElementById("pauseTimerBtn").textContent = "Pause Timer";
+      }
+      function drawTrivia() {
+        if (!triviaDeck.length) triviaDeck = [...trivia];
+        currentTrivia = randomFrom(triviaDeck);
+        triviaDeck = triviaDeck.filter(card => card !== currentTrivia);
+        document.getElementById("triviaFlip").classList.remove("flipped");
+        document.getElementById("triviaCardFront").innerHTML = `<div><div class="cardType">${currentTrivia.category}</div><div class="promptText">${currentTrivia.q}</div></div><div class="cardFoot">${triviaDeck.length} questions left before reset</div>`;
+        document.getElementById("triviaCardBack").innerHTML = "";
+        document.getElementById("options").innerHTML = currentTrivia.options.map((option, index) => `<button class="optionBtn" onclick="answerTrivia(${index}, this)">${String.fromCharCode(65 + index)}. ${option}</button>`).join("");
+      }
+      function answerTrivia(index, button) {
+        const buttons = [...document.querySelectorAll(".optionBtn")];
+        buttons.forEach((btn, btnIndex) => {
+          btn.disabled = true;
+          if (btnIndex === currentTrivia.answer) btn.classList.add("correct");
+        });
+        if (index !== currentTrivia.answer) button.classList.add("wrong");
+        const result = index === currentTrivia.answer ? "Correct" : "Wrong";
+        const drinkLine = index === currentTrivia.answer ? "Everyone else drinks." : "Drink.";
+        document.getElementById("triviaCardBack").innerHTML = `<div><div class="cardType">${result}</div><div class="answerText">${drinkLine}<br><br>Correct answer: ${String.fromCharCode(65 + currentTrivia.answer)}. ${currentTrivia.options[currentTrivia.answer]}</div><div class="factText">${currentTrivia.fact}</div></div><div class="cardFoot">Skip question for the next card.</div>`;
+        document.getElementById("triviaFlip").classList.add("flipped");
+      }
+    </script>
+  </body>
+</html>

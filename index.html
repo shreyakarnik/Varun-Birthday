@@ -843,9 +843,9 @@
                 <h3>Grandpa Energy</h3>
                 <p>Despite being only 30, exhibits the behavioral patterns of a 67-year-old homeowner: parking logistics, early exits, weather commentary, and occasional back-pain monologues.</p>
                 <h3>Secret Pookie</h3>
-                <p>Appears grumpy. Is actually soft. Do not tell him this.</p>
+                <p>Appears grumpy, is actually soft. Do not tell him this.</p>
                 <h3>Devil's Advocate</h3>
-                <p>Not necessarily because he disagrees. Mostly because he enjoys watching everyone become progressively more frustrated.</p>
+                <p>Not necessarily because he disagrees, but because fun.</p>
               </div>
               <div class="bioCard">
                 <h2>Skills</h2>
@@ -867,16 +867,16 @@
                   <li>staring into the distance after matches</li>
                 </ul>
                 <h3>Professional Complainer</h3>
-                <p>Frequently tired, work-battered, and somehow still available for the gym.</p>
+                <p>Frequently tired, work-battered, and somehow still has energy for gym.</p>
               </div>
               <div class="bioCard">
                 <h2>Ongoing Storylines</h2>
                 <h3>The Parking Saga</h3>
                 <p>A subplot spanning all seasons: Oh there's parking? Did I park properly? Let me check my car. My car is right there. We should leave before parking gets bad.</p>
                 <h3>Korea Enthusiast Starter Pack</h3>
-                <p>KBBQ every month, soju appreciation, seaweed acquisition, and unexpectedly passionate social etiquette analysis.</p>
+                <p>KBBQ every month, soju appreciation, excessive free seaweed consumption, and unexpectedly passionate social etiquette analysis.</p>
                 <h3>Future Cat Dad</h3>
-                <p>Emotionally prepared. Cat status: pending acquisition.</p>
+                <p>Emotionally prepared. Mr.Cat status: pending acquisition.</p>
               </div>
               <div class="bioCard">
                 <h2>Recurring Dialogue</h2>
@@ -887,18 +887,19 @@
                   <li>Can we go for KBBQ?</li>
                   <li>Let me just check on my car.</li>
                   <li>Did I park properly?</li>
+                  <li>Eww look how he's parked. It isn't even proprely parallel</li>
                 </ul>
               </div>
               <div class="bioCard">
                 <h2>Character Development Arc</h2>
                 <h3>Mountain Hermit Arc</h3>
-                <p>If given sufficient funding and internet access, would immediately disappear into a secluded mountain cabin and emerge only for gym sessions, football matches, seaweed procurement, and occasional human interaction.</p>
+                <p>If given sufficient funding and internet access, would immediately disappear into a secluded mountain cabin and emerge only for gym sessions, football matches, KBBQ, and occasional cat interaction.</p>
                 <h3>Boyfriend Rating</h3>
-                <p>Current assessment: decent. Not currently accepting exchanges or returns.</p>
+                <p>Current assessment: 50-50. Maybe would return maybe wont.</p>
               </div>
               <div class="bioCard contentWarning">
                 <h2>Content Warning</h2>
-                <p>This character may contain excessive parking awareness, Liverpool-induced sadness, unsolicited devil's advocate arguments, gym addiction, seaweed consumption, hidden affection, chronic grumbling, and grandpa behavior despite being 30. Viewer discretion advised.</p>
+                <p>This character may contain excessive parking awareness, Liverpool-induced sadness, unsolicited devil's advocate arguments, gym addiction, hidden affection, chronic grumbling, and grandpa behavior at 30. Viewer discretion not really advised.</p>
               </div>
             </div>
           </div>
@@ -947,7 +948,7 @@
         <button class="backBtn" onclick="goHome()">‹ Back</button>
         <div class="gameHeader">
           <h1>What Would Varun Do?</h1>
-          <div class="rules">A random scenario will appear. Varun has 15 seconds to secretly write what he would actually do. Everyone else guesses. Reveal Varun's answer. Anyone who guessed correctly is safe. Everyone else drinks. If Varun fails to answer within 15 seconds, he drinks.</div>
+          <div class="rules">A random scenario will appear. Varun has 10 seconds to secretly write what he would actually do. Everyone else guesses. Reveal Varun's answer. Anyone who guessed correctly is safe. Everyone else drinks. If Varun fails to answer within 10 seconds, he drinks.</div>
         </div>
         <div class="stage shuffleStage">
           <div class="wwvdBoard">
@@ -991,77 +992,77 @@
       const shufflePrompts = [
         { type: "Once", text: "Person sitting to Varun's right takes a sip" },
         { type: "Once", text: "Person sitting to Varun's left finishes their drink" },
-        { type: "Once", text: "Last person to text Varun drinks" },
-        { type: "Once", text: "Last person to hug Varun drinks" },
+        { type: "Once", text: "Last person to text Varun here drinks" },
+        { type: "Once", text: "Last person to hug Varun here drinks" },
         { type: "Once", text: "Anyone who has known Varun less than 2 years drinks" },
-        { type: "Once", text: "Anyone who met Varun online drinks" },
-        { type: "Once", text: "Whoever has the oldest photo with Varun assigns drinks" },
+        { type: "Once", text: "Anyone who met Varun through a friend drinks" },
+        { type: "Once", text: "Whoever has the latest photo with Varun assigns drinks" },
         { type: "Once", text: "Person with the lowest phone battery drinks" },
         { type: "Once", text: "Tallest person drinks" },
         { type: "Once", text: "Shortest person assigns drinks" },
-        { type: "Once", text: "Person with the newest shoes assigns a sip" },
-        { type: "Once", text: "Whoever travelled the farthest to be here drinks" },
+        { type: "Once", text: "Person who's been given random advice by Varun drinks" },
+        { type: "Once", text: "Whoever arrived last drinks" },
         { type: "Once", text: "Last person to make eye contact with Varun drinks" },
         { type: "Once", text: "Anyone wearing black drinks" },
         { type: "Once", text: "Loser of rock-paper-scissors against Varun drinks" },
         { type: "Round Robin", text: "Everyone guesses Varun's Starbucks order - wrong answers drink" },
         { type: "Round Robin", text: "Everyone says one thing Varun would never say" },
         { type: "Round Robin", text: "Everyone votes who would survive a zombie apocalypse with Varun" },
-        { type: "Round Robin", text: "Everyone guesses Varun's type" },
-        { type: "Round Robin", text: "Everyone tries Varun's signature pose" },
+        { type: "Round Robin", text: "Go around the circle, first person says something varun would say, second says that plus adds something of their own and so forth. First person to forget, drinks" },
+        { type: "Round Robin", text: "What's Varun's signature dialogue?" },
         { type: "Round Robin", text: "Everyone imitates Varun's texting style" },
         { type: "Round Robin", text: "Everyone says how they met Varun" },
-        { type: "Round Robin", text: "Everyone votes who would survive longest stranded with Varun" },
-        { type: "Round Robin", text: "Everyone guesses Varun's most-used emoji" },
-        { type: "Round Robin", text: "Everyone has to say one thing they genuinely like about Varun or drink" },
-        { type: "Continuously Active", text: "If Varun checks his phone, everyone drinks" },
-        { type: "Continuously Active", text: "If Varun laughs too hard, he assigns 3 sips" },
-        { type: "Continuously Active", text: "If someone interrupts Varun mid-story, they drink" },
+        { type: "Round Robin", text: "Discuss if Varun can survive a Zombie apocalypse. Funniest by popular vote assigns sips" },
+        { type: "Round Robin", text: "Everyone guesses Varun's most-used emoji. Winner assigns sips" },
+        { type: "Round Robin", text: "Go around the circle say one thing they genuinely like about Varun or drink" },
+        { type: "Continuously Active", text: "If Varun checked his phone in the past 10 mins, everyone drinks" },
+        { type: "Continuously Active", text: "If Varun laughed hard in the past 10 mins, he assigns 3 sips" },
+        { type: "Continuously Active", text: "If someone interrupts Varun mid-story, Varun drinks" },
         { type: "Continuously Active", text: "If Varun says 'actually,' everyone drinks" },
         { type: "Continuously Active", text: "If Varun mentions work, he drinks" },
-        { type: "Continuously Active", text: "If someone says 'remember when...', everyone drinks" },
+        { type: "Continuously Active", text: "If Varun mentioned football anytime during the night, everyone drinks" },
         { type: "Continuously Active", text: "If anyone mentions Canada vs US differences, everyone drinks" },
         { type: "Continuously Active", text: "If Varun says 'that's crazy,' everyone drinks" },
         { type: "Continuously Active", text: "If someone says 'lowkey,' they drink" },
-        { type: "Continuously Active", text: "If Varun starts telling a long story, everyone pre-drinks" },
-        { type: "Continuously Active", text: "If someone drops their phone, they finish their drink" },
-        { type: "Continuously Active", text: "If Varun says 'wait wait wait,' everyone sips" },
-        { type: "Continuously Active", text: "If someone says 'literally,' they drink" },
-        { type: "Continuously Active", text: "If Varun starts debating something seriously, everyone drinks" },
-        { type: "Continuously Active", text: "If anyone says 'fair enough,' they drink" },
-        { type: "Continuously Active", text: "If Varun roasts someone successfully, victim drinks" },
-        { type: "Continuously Active", text: "If the roast flops, Varun drinks" },
+        { type: "Continuously Active", text: "If Varun starts telling a long story, everyone drinks" },
+        { type: "Continuously Active", text: "If someone dropped their phone anytime during the night, they finish their drink" },
+        { type: "Continuously Active", text: "If Varun mentioned politics anytime during the night everyone sips" },
+        { type: "Continuously Active", text: "If someone said 'literally,' anytime during the night they drink" },
+        { type: "Continuously Active", text: "If Varun starts debating something seriously anytime during the night, everyone drinks" },
+        { type: "Continuously Active", text: "If anyone said 'fair enough,' anytime during the night they drink" },
+        { type: "Continuously Active", text: "If Varun roasted someone successfully anytime during the night, victim drinks" },
+        { type: "Continuously Active", text: "If Varun roasted someone anytime during the night and the roast flops, Varun drinks" },
         { type: "Continuously Active", text: "If anyone says 'vibes,' everyone drinks" },
-        { type: "Continuously Active", text: "If Varun starts giving advice, everyone drinks" },
-        { type: "Continuously Active", text: "If anyone mentions AI or ChatGPT, everyone drinks" }
+        { type: "Continuously Active", text: "If Varun gave advice at any point during the night, everyone drinks" },
+        { type: "Continuously Active", text: "If anyone mentioned AI or ChatGPT in the past 20 mins, everyone drinks" }
       ];
 
       const wwvdPrompts = [
-        "You accidentally like a photo from 2018. What do you do?",
-        "You find $100 on the ground. What do you do?",
-        "Your Uber driver starts crying. What do you do?",
-        "You miss your flight by 2 minutes. What do you do?",
-        "You wake up with 147 unread messages. What do you do?",
-        "You receive a text saying \"we need to talk.\" What do you do?",
-        "Your food arrives completely wrong. What do you do?",
-        "You discover your phone battery is at 1%. What do you do?",
-        "You're stuck in an elevator with your ex. What do you do?",
-        "A stranger hands you a baby and runs away. What do you do?",
-        "You become Prime Minister for one day. What's your first move?",
-        "You accidentally send a screenshot to the person in the screenshot. What do you do?",
-        "You win $10 million overnight. What do you buy first?",
-        "A penguin appears in your kitchen. What do you do?",
-        "You're the only person awake at a house party. What do you do?",
-        "Your boss accidentally sends you their salary. What do you do?",
-        "You discover your dog can talk. What is your first question?",
-        "You open your camera and it's already recording. What do you do?",
-        "You're offered free pizza for life or $50,000 cash. Which do you choose?",
-        "An alien lands and asks to speak to humanity's leader. What do you do?",
-        "You accidentally join a cult. How long before you realize?",
-        "Someone says \"trust me\" before doing something important. What do you do?",
-        "You have to spend 24 hours in IKEA. What's your strategy?",
-        "You can erase one app from existence forever. Which one?",
-        "You wake up and discover you're 60 years old. What's the first thing you complain about?"
+        "You find $100 on the ground. What would Varun do?",
+        "Your Uber driver starts crying. What would Varun do?",
+        "You miss your flight by 2 minutes. What would Varun do?",
+        "You wake up with 147 unread messages. What would Varun do?",
+        "You receive a text saying 'we need to talk.' What would Varun do?",
+        "Your food arrives completely wrong. What would Varun do?",
+        "You discover your phone battery is at 1% with no cash and you're halfway across the city. What would Varun do?",
+        "You accidentally silently fart in a full elevator. What would Varun do?",
+        "A stranger hands you a baby and runs away. What would Varun do?"",
+        "You become Prime Minister for one day. What's the first thing that Varun would do?",
+        "You accidentally send a juicy screenshot to the person the screenshot is about. What would Varun do?",
+        "You win $10 million overnight. What would Varun do?",
+        "You're the only person awake at a house party. What would Varun do?",
+        "You discover your cat can talk. What is the first question Varun would ask?",
+        "You're offered free KBBQ for life or $50,000 cash. What would Varun do?",
+        "You accidentally join a cult. How long before Varun realizes?",
+        "Someone says 'trust me' before doing something important. Would Varun trust them?",
+        "You wake up and discover you're 60 years old. What would Varun do?",
+        "Someone scratches your car and leaves a note. What would Varun do?",
+        "Liverpool reaches the Champions League final on the same day as your wedding. What would Varun do?",
+        "You can get free KBBQ right now, but you'll have to wait in line for 3 hours. What would Varun do?",
+        "You've just sat down at home when your friends ask you to go back out. What would Varun do?",
+        "You are given absolute political power for 24 hours. What would Varun do?",
+        "Your neighbour has been parking in two spots for months. What would Varun do?",
+        "You've just finished cleaning the entire house and somebody walks in with muddy shoes. What would Varun do?"
       ];
 
       const trivia = [
